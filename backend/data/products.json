@@ -1,0 +1,33 @@
+[  {    "name": "Wireless Earbuds",    "price": 149.99,    "description": "Experience high-quality sound with these wireless earbuds.",    "rating": 4.5,    "images": [      {        "public_id": "abc123",        "url": "https://www.example.com/images/earbuds.jpg"      }    ],
+    "seller": "Acme Electronics",
+    "stock": 100
+  },
+  {
+    "name": "Smart Watch",
+    "price": 299.99,
+    "description": "Track your fitness and stay connected with this smart watch.",
+    "rating": 4.0,
+    "images": [
+      {
+        "public_id": "def456",
+        "url": "https://www.example.com/images/smartwatch.jpg"
+      }
+    ],
+    "seller": "Gadget World",
+    "stock": 50
+  },
+  {
+    "name": "Wireless Charger",
+    "price": 39.99,
+    "description": "Charge your phone wirelessly with this sleek and stylish charger.",
+    "rating": 4.2,
+    "images": [
+      {
+        "public_id": "ghi789",
+        "url": "https://www.example.com/images/wirelesscharger.jpg"
+      }
+    ],
+    "seller": "Tech Accessories Inc.",
+    "stock": 200
+  }
+]
