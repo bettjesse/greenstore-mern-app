@@ -2,15 +2,15 @@ const express = require("express")
 const router= express.Router()
 const { getProducts , newProduct, getSingleProduct, updateProductById, deleteProduct} = require("../controllers/productController")
 
-const{ isAuthenticatedUser} = require("../middleware/auth")
+const{ isAuthenticatedUser, authorizeRoles} = require("../middleware/auth")
 
-router.route("/products").get(  getProducts)
+router.route("/products").get(getProducts)
 //getting single product data route
 router.route("/product/:id").get(getSingleProduct)
 // posting new product in the databse
-router.route("admin/product/new").post(isAuthenticatedUser,newProduct)
+router.route("/admin/product/new").post(isAuthenticatedUser, authorizeRoles("admin"),newProduct)
 router.route("/admin/product/:id")
-                                 .put(isAuthenticatedUser,updateProductById)
-                                 .delete(isAuthenticatedUser,deleteProduct)
+                                 .put(isAuthenticatedUser,authorizeRoles("admin"),updateProductById)
+                                 .delete(isAuthenticatedUser, authorizeRoles("admin"),deleteProduct)
 
 module.exports = router

@@ -43,6 +43,8 @@ const productSchema=  new mongoose.Schema({
         
         
     ],
+
+   
     seller: {
         type: String,
         required:[ true , "please enter product seller"],
@@ -53,7 +55,12 @@ const productSchema=  new mongoose.Schema({
         type: Number,
         required:[ true , "please enter product stock"],
         default: 0
-    }
+    },
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+        required: true
+      },
 
 
 })
