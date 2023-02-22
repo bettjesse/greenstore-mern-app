@@ -2,6 +2,7 @@
 const User = require("../models/user");
 const sendToken = require("../utils/jwtToken")
 const sendPasswordResetEmail = require('../utils/sendPasswordResetEmail');
+const crypto= require("crypto")
 
 
 
@@ -75,9 +76,54 @@ exports.forgotPassword = async (req, res, next) => {
 };
 
 
+// reset password => /api/v1/passord/reset
+exports.resetPassword = async (req, res, next) => {
+const resetPasswordToken=  crypto.createHash("sha265").update(req.params.token).digest("hex")
+const user= await User.findOne({
+  resetPasswordToken,
+  resetPasswordExpire: {$gt: Date.now()}
+})
+if (!user) {
+  return next("password  reset token is invalid or has expired ",400)
+}
+if (req.body.password!== req.body.confirmPassword,400){
+  return next("password does not match")
+}
+// set new password 
+user.password = req.body.password
+user.resetPasswordToken = undefined
+user.resetPasswordExpire= undefined
+await user.save()
+sendToken(user,200,res)
+
+}
+
+//get currently logged in user details
+// exports.getUserProfile= async(req,res,next)=>{
+// const user= await User.find(req.user.id)
+// res.status(200).json({
+//   success: true,
+//   user
+// })
+// }
 
 
+exports.getUserProfile= async(req,res,next)=>{
+  try {
+    const user = await User.findById(req.user.id);
 
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      user
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
 
 //logout user
 
@@ -89,3 +135,63 @@ exports.logout = async (req, res) => {
     message: "Logged out successfully"
   });
 };
+
+exports.getAllUsers= async(req,res,next)=>{
+ const users= await User.find()
+
+ res.status(200).json({
+  success: true,
+  users
+ })
+}
+ 
+exports.getUserDetail = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      user
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+exports.updateUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.role = req.body.role || user.role;
+
+    await user.save();
+
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+
+    res.status(200).json({ success: true, message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
