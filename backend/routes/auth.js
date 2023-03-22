@@ -3,7 +3,7 @@ const router = express.Router();
 require('dotenv').config();
 
 
-const { register, login, logout, forgotPassword, resetPassword, getUserProfile, getAllUsers,getUserDetail, updateUser, deleteUser } = require('../controllers/authController');
+const { register, login, logout, forgotPassword,getUserProfile,resetPassword, getAllUsers,getUserDetail, updateUser, deleteUser } = require('../controllers/authController');
 
 // @route   POST /api/v1/auth/register
 // @desc    Register a new user
@@ -14,7 +14,7 @@ router.route('/login').post(login)
 router.route("/password/forgot").post(forgotPassword)
 router.route("/password/reset/:token").put(resetPassword)
 router.route('/logout').get(logout)
-router.route('/me').get( isAuthenticatedUser, getUserProfile)
+router.route('/me').get(isAuthenticatedUser, getUserProfile)
 router.route("/admin/users").get(isAuthenticatedUser, authorizeRoles("admin"),getAllUsers) 
 router.route("/admin/user/:id").get(isAuthenticatedUser, authorizeRoles("admin"), getUserDetail) 
 router.route("/admin/user/:id").put(isAuthenticatedUser, authorizeRoles("admin"), updateUser) 

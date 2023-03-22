@@ -56,7 +56,7 @@ exports.getOrderById = async (req, res) => {
       });
     }
   };
-  //get logged in user order
+  
   // Get all orders for logged-in user
   exports.myOrders = async (req, res) => {
     try {
@@ -74,4 +74,102 @@ exports.getOrderById = async (req, res) => {
       });
     }
   };
+  // Get a list of all orders
+  exports.getOrders = async (req, res) => {
+  try {
+    const orders = await Order.find().populate('user', 'name email');
+    const totalAmount = orders.reduce((acc, order) => acc + order.totalPrice, 0);
   
+    res.status(200).json({
+      success: true,
+      data: {
+        orders,
+        totalAmount
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      error: 'Server error'
+    });
+  }
+}
+
+// Update an order by ID
+exports.updateOrderById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: 'Order not found'
+      });
+    }
+
+    if (order.deliveredAt) {
+      return res.status(400).json({
+        success: false,
+        error: 'Order has already been delivered'
+      });
+    }
+
+    order.deliveredAt = Date.now();
+    order.orderStatus = 'delivered';
+
+    await order.save();
+
+    for (const item of order.items) {
+      const product = await Product.findById(item.product);
+
+      if (product) {
+        product.stock -= item.quantity;
+
+        await product.updateOne({ stock: product.stock });
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      data: order
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      error: 'Server error'
+    });
+  }
+};
+
+// Delete an order by ID
+exports.deleteOrderById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: 'Order not found'
+      });
+    }
+
+    await order.remove();
+
+    res.status(200).json({
+      success: true,
+      data: {}
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      error: 'Server error'
+    });
+  }
+};
