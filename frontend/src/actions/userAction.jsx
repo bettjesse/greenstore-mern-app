@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
@@ -9,8 +10,8 @@ import {
   LOAD_USERREQUEST,
   LOAD_USER_SUCCESS,
   LOAD_USER_FAIL,
-  // LOGOUT_SUCCESS,
-  //   LOGOUT_FAIL,
+  LOGOUT_SUCCESS,
+    LOGOUT_FAIL,
   
   CLEAR_ERROR,
 } from "../constants/userConstant";
@@ -54,7 +55,7 @@ export const loadUser = () => async (dispatch) => {
 
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`, // include the token in the header
+        Authorization: ` ${token}`, // include the token in the header
       },
     };
 
@@ -80,6 +81,7 @@ export const loadUser = () => async (dispatch) => {
 
 // register user action
 
+
 export const register = (name, email, password) => async (dispatch) => {
   try {
     dispatch({ type: USER_REGISTER_REQUEST });
@@ -93,11 +95,10 @@ export const register = (name, email, password) => async (dispatch) => {
     
     const { data } = await axios.post('http://localhost:4000/api/v1/register', { name, email, password }, config);
 
-    console.log('Received cookies:', document.cookie);
-
     if (data.success) {
       dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
-      // automatically log in the user
+      // redirect the user to the login page
+      
     } else {
       dispatch({ type: USER_REGISTER_FAILURE, payload: data.message });
     }
@@ -121,14 +122,11 @@ export const register = (name, email, password) => async (dispatch) => {
 
 
 
-// export const logout = () => async (dispatch) => {
-//   try {
-  
 
-//     await axios.get('http://localhost:4000/api/v1/logout');
+export const logout = () => async (dispatch) => {
+  localStorage.removeItem('token');
+  dispatch({ type: LOGOUT_SUCCESS });
+}
 
-//     dispatch({ type: LOGOUT_SUCCESS });
-//   } catch (error) {
-//     dispatch({ type: LOGOUT_FAIL, payload: error.message });
-//   }
-// };
+
+

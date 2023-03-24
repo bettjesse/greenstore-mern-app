@@ -10,19 +10,68 @@ const jwt = require("jsonwebtoken");
 
   
 
-
 exports.register = async (req, res, next) => {
   const { name, email, password } = req.body;
 
+  try {
     // Create new user
     //did not add avator
-    const user = await User.create({ name,
+    const user = await User.create({
+      name,
       email,
-       password 
-      });
-      sendToken(user,200,res)
-  
-}
+      password,
+    });
+
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.login = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  // Check if email and password are provided
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ success: false, error: "Please provide email and password" });
+  }
+
+  try {
+    // Find user by email
+    const user = await User.findOne({ email }).select("+password");
+
+    // Check if user exists
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, error: "Invalid credentials" });
+    }
+
+    // Check if password matches
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ success: false, error: "Invalid credentials" });
+    }
+
+    // Generate JWT token
+    const token = user.getJwtToken();
+
+    // Send response with success and token
+    res.status(200).json({
+      success: true,
+      token: `Bearer ${token}`, // Add "Bearer" prefix to the token
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
 
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -118,7 +167,7 @@ exports.getProfile = async (req, res, next) => {
     const userId = req.user._id;
     const user = await User.findById(userId);
 
-    res.status(200).json({ success: true, data: user });
+    res.status(200).json({ success: true,  user });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -132,13 +181,14 @@ exports.getProfile = async (req, res, next) => {
 // //logout user
 
 exports.logout = async (req, res) => {
-  res.clearCookie("token");
+  res.setHeader('Authorization', ''); // remove authorization header
 
   res.status(200).json({
     success: true,
     message: "Logged out successfully"
   });
 };
+
 
 exports.getAllUsers= async(req,res,next)=>{
  const users= await User.find()

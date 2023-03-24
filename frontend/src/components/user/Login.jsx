@@ -17,9 +17,7 @@ const Login = () => {
   const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
-if (error){
-  dispatch(clearError)
-}
+
 
     if (isAuthenticated) {
       console.log('Redirecting to homepage...');
@@ -41,6 +39,7 @@ if (error){
     console.log('Logging in with email:', email, 'password:', password);
     dispatch(login(email, password));
     dispatch(loadUser())
+  
     }
     };
 

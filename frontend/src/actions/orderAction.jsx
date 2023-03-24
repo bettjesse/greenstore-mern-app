@@ -40,11 +40,16 @@ export const createOrder = (orderData) => async (dispatch) => {
 export const myOrder = () => async (dispatch, getState) => {
   try {
     dispatch({ type: MY_ORDER_REQUEST });
-    console.log('Fetching orders for the current user...');
+    const token = localStorage.getItem('token'); // retrieve the token from local storage
 
-  
-    const { data } = await axios.get('http://localhost:4000/api/v1/orders/me');
-    console.log('Received response:', data);
+
+    const config = {
+      headers: {
+        Authorization: ` ${token}`,
+      },
+    };
+
+    const { data } = await axios.get('http://localhost:4000/api/v1/orders/me', config);
 
     dispatch({ type: MY_ORDER_SUCCESS, payload: data.orders });
   } catch (error) {
@@ -53,7 +58,7 @@ export const myOrder = () => async (dispatch, getState) => {
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
-          : error.message
+          : error.message,
     });
   }
 };
