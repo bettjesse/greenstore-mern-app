@@ -66,11 +66,11 @@ userSchema.methods.comparePassword = async function (inputPassword) {
 
 
 // method to get a JWT
-// userSchema.methods.getJwtToken = function () {
-//   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-//     expiresIn: 365 * 24 * 60 * 60 // expires in 1 year
-//   });
-// };
+userSchema.methods.getJwtToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: 365 * 24 * 60 * 60 // expires in 1 year
+  });
+};
 
 
 //generate password reset token

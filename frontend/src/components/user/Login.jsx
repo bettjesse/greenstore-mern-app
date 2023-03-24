@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, clearError } from '../../actions/userAction';
+import { login,loadUser } from '../../actions/userAction';
 import MetaData from '../MetaData';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -40,6 +40,7 @@ if (error){
     } else {
     console.log('Logging in with email:', email, 'password:', password);
     dispatch(login(email, password));
+    dispatch(loadUser())
     }
     };
 

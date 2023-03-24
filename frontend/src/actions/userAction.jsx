@@ -25,23 +25,49 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post('http://localhost:4000/api/v1/login', { email, password }, config);
+    const { data } = await axios.post(
+      'http://localhost:4000/api/v1/login',
+      { email, password },
+      config
+    );
+
+    const token = data.token;
 
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data.user });
+    localStorage.setItem('token', token); // save token to local storage
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAILURE,
       payload:
-        error.response && error.response.data.message ? error.response.data.message : error.message,
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
     });
   }
 };
-export const clearError = async (dispatch) => {
-    dispatch({
-      type: CLEAR_ERROR,
-    });
-  };
-  
+
+export const loadUser = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOAD_USERREQUEST });
+
+    const token = localStorage.getItem('token'); // retrieve the token from local storage
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // include the token in the header
+      },
+    };
+
+    const { data } = await axios.get(
+      'http://localhost:4000/api/v1/me',
+      config
+    );
+
+    dispatch({ type: LOAD_USER_SUCCESS, payload: data.user });
+  } catch (error) {
+    dispatch({ type: LOAD_USER_FAIL, payload: error.message });
+  }
+};
 
  
 
@@ -53,44 +79,30 @@ export const clearError = async (dispatch) => {
 
 
 // register user action
+
 export const register = (name, email, password) => async (dispatch) => {
-    try {
-        dispatch({ type: USER_REGISTER_REQUEST });
-
-        const response = await fetch('http://localhost:4000/api/v1/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name, email, password }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
-            // automatically log in the user
-        } else {
-            dispatch({ type: USER_REGISTER_FAILURE, payload: data.message });
-        }
-    } catch (error) {
-        dispatch({ type: USER_REGISTER_FAILURE, payload: error.message });
-    }
-};
-
-
-
-
-
-export const loadUser = () => async (dispatch) => {
   try {
-    dispatch({ type: LOAD_USERREQUEST });
+    dispatch({ type: USER_REGISTER_REQUEST });
 
-    const { data } = await axios.get('http://localhost:4000/api/v1/me',{ withCredentials: true});
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    };
+    
+    const { data } = await axios.post('http://localhost:4000/api/v1/register', { name, email, password }, config);
 
-    dispatch({ type: LOAD_USER_SUCCESS, payload: data.user });
+    console.log('Received cookies:', document.cookie);
+
+    if (data.success) {
+      dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
+      // automatically log in the user
+    } else {
+      dispatch({ type: USER_REGISTER_FAILURE, payload: data.message });
+    }
   } catch (error) {
-    dispatch({ type: LOAD_USER_FAIL, payload: error.message });
+    dispatch({ type: USER_REGISTER_FAILURE, payload: error.message });
   }
 };
 
@@ -98,17 +110,15 @@ export const loadUser = () => async (dispatch) => {
 
 
 
-// export const loadUser = () => async (dispatch) => {
-//   try {
-//     dispatch({ type: LOAD_USERREQUEST });
 
-//     const { data } = await axios.get('http://localhost:4000/api/v1/me');
 
-//     dispatch({ type: LOAD_USER_SUCCESS, payload: data.user });
-//   } catch (error) {
-//     dispatch({ type: LOAD_USER_FAIL, payload: error.message });
-//   }
-// };
+
+
+
+
+
+
+
 
 
 // export const logout = () => async (dispatch) => {
@@ -122,4 +132,3 @@ export const loadUser = () => async (dispatch) => {
 //     dispatch({ type: LOGOUT_FAIL, payload: error.message });
 //   }
 // };
-
