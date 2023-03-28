@@ -2,16 +2,20 @@ import React, { useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import CheckoutSteps from "./CheckoutSteps";
 import { useNavigate } from "react-router-dom";
+import { createOrder } from "../../actions/orderAction";
+import { useDispatch } from "react-redux";
+
 
 const Payment = () => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const dispatch = useDispatch()
 
-  const orderData= JSON.parse(sessionStorage.getItem("orderData"))
+  const orderInfo= JSON.parse(sessionStorage.getItem("orderData"))
   const paymentData= {
-    amount:Math.round(orderData.total* 100)
+    amount:Math.round(orderInfo.totalPrice* 100)
   }
 
   const handleSubmit = async (event) => {
@@ -47,6 +51,7 @@ const Payment = () => {
 
         const data = await response.json();
         console.log("[client_secret]", data.client_secret);
+        
         const clientSecret= data.client_secret 
 
         if (!stripe|| !elements){
@@ -67,6 +72,16 @@ const Payment = () => {
           console.log("[error]", result.error);
         } else {
           console.log("[PaymentIntent]", result.paymentIntent);
+          console.log("intent", result.paymentIntent.status);
+          const orderData = {
+            ...orderInfo,
+            paymentInfo:{
+                id:result.paymentIntent.status,
+                status: result.paymentIntent.status
+            } 
+          };
+          dispatch(createOrder(orderData));
+         
           // Redirect to success page
           navigate("/success");
         }
@@ -74,6 +89,9 @@ const Payment = () => {
         console.error(error);
       }
     }
+  
+    
+
   };
 
   return (
@@ -106,7 +124,7 @@ const Payment = () => {
           type="submit"
           disabled={!stripe}
         >
-          Pay{`-${orderData&& orderData.total}`}
+          Pay{`-${orderInfo&& orderInfo.totalPrice}`}
         </button>
       </form>
     </div>

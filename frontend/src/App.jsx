@@ -16,6 +16,7 @@ import Payment from './components/cart/Payment';
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import OrderHistory from './components/order/OrderHistory';
+import OrderDetails from './components/order/OrderDetails';
 
 
 const stripePromise = loadStripe("pk_test_51MlndeEGaG54q0rrSzY649HcJaHATq8YxddP8JQr6olYi0mVczg6610N8o6BA2qig541aM7B8fZqsCWNxQbGY5Kh00M3o7P0N4");
@@ -64,6 +65,7 @@ const App = () => {
         {/* <Route path="/profile" element={<Profile />} /> */}
         <Route path="/payment" element={<Elements stripe={stripePromise}><Payment /></Elements>} />
         <Route path ="/orders" element= {<OrderHistory/>}/>
+        <Route path ="/order/:id" element= {<OrderDetails/>}/>
       </Routes>
       <Footer />
     </Router>

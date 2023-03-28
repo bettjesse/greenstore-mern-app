@@ -1,57 +1,111 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useMemo, useEffect } from 'react';
+import { useTable, useGlobalFilter } from 'react-table';
+import { useSelector,useDispatch } from 'react-redux';
 import { myOrder } from '../../actions/orderAction';
+import { Link } from 'react-router-dom';
 
 const OrderHistory = () => {
+
   const dispatch = useDispatch();
-  const { loading, orders, error } = useSelector((state) => state.myOrder);
+
+  const { orders } = useSelector((state) => state.myOrder);
 
   useEffect(() => {
     dispatch(myOrder());
   }, [dispatch]);
+  const columns = useMemo(
+    () => [
+      // {
+      //   Header: 'Order ID',
+      //   accessor: '_id',
+      // },
+      {
+        Header: 'Date',
+        accessor: 'createdAt',
+        Cell: ({ value }) => new Date(value).toLocaleString(),
+      },
+      {
+        Header: 'Product Name',
+        accessor: 'items',
+        Cell: ({ value }) => value.map((item) => item.name).join(', '),
+      },
+      {
+        Header: 'Total Price',
+        accessor: 'totalPrice',
+        Cell: ({ value }) => `Ksh${value.toFixed(2)}`,
+      },
+      {
+        Header: 'Payment Status',
+        accessor: 'paymentInfo.status',
+        Cell: ({ value }) => (
+          <span style={{ color: value === 'succeeded' ? 'green' : 'red' }}>{value}</span>
+        ),
+      },
+      {
+        Header: 'Delivery Status',
+        accessor: 'orderStatus',
+        Cell: ({ value }) => (
+          <span style={{ color: value === 'delivered' ? 'green' : 'red' }}>{value}</span>
+        ),
+      },
+      {
+        Header: 'Actions',
+        accessor: '_id',
+        Cell: ({ row }) => (
+          <Link to={`/order/${row.original._id}`}>
+            <button className="text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded">
+              View Details
+            </button>
+          </Link>
+        ),
+      },
+    ],
+    []
+  );
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const tableData = useMemo(() => orders, [orders]);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state, setGlobalFilter } =
+    useTable({ columns, data: tableData }, useGlobalFilter);
+
+  const { globalFilter } = state;
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Order History</h2>
-      {orders && orders.length > 0 ? (
-        <table className="table-auto">
-          <thead>
-            <tr>
-              <th className="px-4 py-2">Order ID</th>
-              <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">Product Name</th>
-              <th className="px-4 py-2">Total Price</th>
-           
-              <th className="px-4 py-2">Payment Status</th>
-              <th className="px-4 py-2">Delivery Status</th>
+    <div className="flex flex-col justify-center items-center">
+      <input
+        type="text"
+        value={globalFilter || ''}
+        onChange={(e) => setGlobalFilter(e.target.value)}
+        placeholder="Search orders..."
+        className="border border-gray-300 rounded-md px-4 py-2 mb-4"
+      />
+      <table {...getTableProps()} className="table-auto border-collapse border border-gray-500">
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()} className="bg-gray-100">
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()} className="border border-gray-500 p-2 font-bold">
+                  {column.render('Header')}
+                </th>
+              ))}
             </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td className="border px-4 py-2">{order._id}</td>
-                <td className="border px-4 py-2">{new Date(order.createdAt).toLocaleString()}</td>
-                <td className="border px-4 py-2">
-      {order.items.map((item) => item.name).join(', ')}
-    </td>
-                <td className="border px-4 py-2">Ksh{order.totalPrice.toFixed(2)}</td>
-                <td className="border px-4 py-2">{order.paymentInfo.status}</td>
-                <td className="border px-4 py-2">{order.orderStatus}</td>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()} className="divide-y divide-gray-500">
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()} className="hover:bg-gray-200">
+                {row.cells.map((cell) => (
+                  <td {...cell.getCellProps()} className="border border-gray-500 p-2">
+                    {cell.render('Cell')}
+                  </td>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div>No orders found</div>
-      )}
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };

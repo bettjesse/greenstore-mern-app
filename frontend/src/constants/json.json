@@ -1,0 +1,33 @@
+{
+    "id": "pi_3MqZ42EGaG54q0rr0bYltDl7",
+    "object": "payment_intent",
+    "amount": 14999,
+    "amount_details": {
+        "tip": {}
+    },
+    "automatic_payment_methods": {
+        "enabled": true
+    },
+    "canceled_at": null,
+    "cancellation_reason": null,
+    "capture_method": "automatic",
+    "client_secret": "pi_3MqZ42EGaG54q0rr0bYltDl7_secret_v353kuSZAsOHk1ZeLVdErl0x9",
+    "confirmation_method": "automatic",
+    "created": 1679996618,
+    "currency": "kes",
+    "description": null,
+    "last_payment_error": null,
+    "livemode": false,
+    "next_action": null,
+    "payment_method": "pm_1MqZ42EGaG54q0rrAgsvghRJ",
+    "payment_method_types": [
+        "card",
+        "link"
+    ],
+    "processing": null,
+    "receipt_email": null,
+    "setup_future_usage": null,
+    "shipping": null,
+    "source": null,
+    "status": "succeeded"
+}

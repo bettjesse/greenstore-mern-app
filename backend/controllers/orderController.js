@@ -8,7 +8,6 @@ exports.createOrder = async (req, res) => {
   try {
     const order = await Order.create({
       shipping,
-      
       items,
       paymentInfo,
       itemsPrice,
@@ -46,7 +45,7 @@ exports.getOrderById = async (req, res) => {
   
       res.status(200).json({
         success: true,
-        data: order
+         order
       });
     } catch (error) {
       console.error(error);

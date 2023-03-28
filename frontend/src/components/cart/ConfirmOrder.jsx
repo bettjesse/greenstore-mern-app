@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link , useNavigate} from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import CheckoutSteps from './CheckoutSteps';
+import { createOrder } from '../../actions/orderAction';
+// import {addToCart} from "../../actions/cartAction"
 
 const ConfirmOrder = () => {
   const { cartItems, shipping } = useSelector(state => state.cart);
   const { user } = useSelector(state => state.auth);
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  
   
  
 // Calculate cart subtotal
@@ -20,20 +24,27 @@ const shippingCost = subtotal > 100 ? 0 : 10;
 
 
 // Calculate total cost
-const total = subtotal + shippingCost;
+const totalPrice = subtotal + shippingCost;
 
 
 
 const placeOder = ()=> {
   const orderData = {
   
-  
+  shipping,
     subtotal,
     shippingCost,
-    total,
+    totalPrice,
+    items: cartItems.map(item => ({
+      name: item.name,
+      price: item.price,
+      quantity: item.qty,
+      product:item.product
+    })),
   };
   sessionStorage.setItem('orderData', JSON.stringify(orderData));
   navigate("/payment")
+  // dispatch(createOrder(orderData))
 }
 
   return (
@@ -75,7 +86,7 @@ const placeOder = ()=> {
         </div>
         <div className="flex justify-between items-center font-bold text-xl">
           <span>Total:</span>
-          <span>Ksh{total.toFixed(2)}</span>
+          <span>Ksh{totalPrice.toFixed(2)}</span>
         </div>
       </div>
 

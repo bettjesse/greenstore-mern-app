@@ -38,7 +38,7 @@ const Login = () => {
     } else {
     console.log('Logging in with email:', email, 'password:', password);
     dispatch(login(email, password));
-    dispatch(loadUser())
+   
   
     }
     };
