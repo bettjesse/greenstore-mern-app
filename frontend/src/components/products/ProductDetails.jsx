@@ -58,7 +58,7 @@ const ProductDetails = () => {
         <div className="w-full md:w-1/2 lg:w-3/5 px-4">
           <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
           <p className="text-gray-600 mb-4">{product.description}</p>
-          <p className="text-lg font-bold mb-4">${product.price}</p>
+          <p className="text-lg font-bold mb-4">Ksh{product.price}</p>
           <div className="flex mb-4">
             <button
               onClick={decrementQuantity}
@@ -82,12 +82,7 @@ const ProductDetails = () => {
             >
               Add to Cart
             </button>
-            <button
-              onClick={removeFromCartHandler}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Remove from Cart
-            </button>
+            
           </div>
         </div>
       </div>

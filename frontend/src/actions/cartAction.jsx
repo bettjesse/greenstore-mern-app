@@ -32,19 +32,14 @@ export const removeFromCart = (productId) => ({
   type: REMOVE_FROM_CART,
   payload: productId,
 });
-export const increaseQty = (productId) => (dispatch) => {
-  dispatch({
-    type: INCREASE_QTY,
-    payload: productId,
-  });
+export const increaseQty = (item) => async (dispatch) => {
+  dispatch({ type: INCREASE_QTY, payload: item });
 };
 
-export const decreaseQty = (productId) => (dispatch) => {
-  dispatch({
-    type: DECREASE_QTY,
-    payload: productId,
-  });
-}
+export const decreaseQty = (item) => async (dispatch) => {
+  dispatch({ type: DECREASE_QTY, payload: item });
+};
+
 
 export const saveShippingInfo = (data) => (dispatch) => {
   dispatch({

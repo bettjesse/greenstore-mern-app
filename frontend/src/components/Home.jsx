@@ -25,7 +25,8 @@ const Home = () => {
       {/* Featured Products */}
       <h2 className="text-2xl font-bold my-8 mx-auto max-w-screen-lg px-4">Featured Products</h2>
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        {loading ? (
+        {loading ? 
+        (
           <h2>Loading...</h2>
         ) : error ? (
           <h2>{error}</h2>
@@ -37,7 +38,7 @@ const Home = () => {
       </div>
 
       {/* All Products */}
-      <h2 className="text-2xl font-bold my-8 mx-auto max-w-screen-lg px-4">All Products</h2>
+      {/* <h2 className="text-2xl font-bold my-8 mx-auto max-w-screen-lg px-4">All Products</h2>
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {loading ? (
           <h2>Loading...</h2>
@@ -61,7 +62,8 @@ const Home = () => {
             </div>
           ))
         )}
-      </div>
+
+      </div> */}
       
     </div>
   );

@@ -2,9 +2,9 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaPlus, FaMinus, FaTrash } from 'react-icons/fa';
-import { removeFromCart } from "../../actions/cartAction"
+import { removeFromCart, increaseQty,decreaseQty } from "../../actions/cartAction"
 import { useNavigate } from 'react-router-dom';
-
+import { addToCart } from '../../actions/cartAction';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -25,12 +25,14 @@ const Cart = () => {
     dispatch(removeFromCart(productId));
   };
 
-  const handleDecreaseQty = () => {
-  }
-
-  const handleIncreaseQty = () => {
-    ;
+  const handleDecreaseQty = (item) => {
+    dispatch(decreaseQty(item));
   };
+  
+  const handleIncreaseQty = (item) => {
+    dispatch(increaseQty(item));
+  };
+  
 
   return (
     <div className="container mx-auto my-8">
@@ -51,11 +53,11 @@ const Cart = () => {
                       <Link to={`/product/${item.product}`} className="font-medium">{item.name}</Link>
                       <div className="mt-2 flex items-center">
                         <span className="text-gray-500">Ksh{item.price} x </span>
-                        <button className="text-gray-500 px-2 py-1 rounded-full mr-2" onClick={() => handleDecreaseQty()} >
+                        <button className="text-gray-500 px-2 py-1 rounded-full mr-2" onClick={() => handleDecreaseQty(item)} >
                           <FaMinus />
                         </button>
                         <span className="text-lg">{item.qty}</span>
-                        <button className="text-gray-500 px-2 py-1 rounded-full ml-2" onClick={() => handleIncreaseQty()} >
+                        <button className="text-gray-500 px-2 py-1 rounded-full ml-2" onClick={() => handleIncreaseQty(item)} >
                           <FaPlus />
                         </button>
                         <span className="text-gray-500 ml-4">Ksh{item.qty * item.price}</span>

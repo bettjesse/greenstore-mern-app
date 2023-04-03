@@ -47,14 +47,14 @@ const productSchema=  new mongoose.Schema({
    
     seller: {
         type: String,
-        required:[ true , "please enter product seller"],
+        // required:[ true , "please enter product seller"],
        
         maxLength:[100]
     },
     stock:{
         type: Number,
-        required:[ true , "please enter product stock"],
-        default: 0
+        // required:[ true , "please enter product stock"],
+        // default: 0
     },
     user: {
         type: mongoose.Schema.ObjectId,
