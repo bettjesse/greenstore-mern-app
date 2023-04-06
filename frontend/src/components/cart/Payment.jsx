@@ -76,7 +76,7 @@ const Payment = () => {
           const orderData = {
             ...orderInfo,
             paymentInfo:{
-                id:result.paymentIntent.status,
+                id:result.paymentIntent.id,
                 status: result.paymentIntent.status
             } 
           };

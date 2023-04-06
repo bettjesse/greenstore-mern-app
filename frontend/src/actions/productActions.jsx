@@ -3,6 +3,14 @@ import {
   NEW_PRODUCT_SUCCESS,
   NEW_PRODUCT_FAIL,
   
+  DELETE_PRODUCT_REQUEST,
+  DELETE_PRODUCT_SUCCESS,
+  DELETE_PRODUCT_FAIL,
+  DELETE_PRODUCT_RESET,
+  UPDATE_PRODUCT_REQUEST,
+  UPDATE_PRODUCT_SUCCESS,
+  UPDATE_PRODUCT_FAIL,
+  CLEAR_ERROR,
   ALL_PRODUCTS_FAIL, 
   ALL_PRODUCTS_SUCCESS,
    ALL_PRODUCTS_REQUEST, 
@@ -11,7 +19,7 @@ import {
    ALL_ADMIN_PRODUCTS_REQUEST,
 PRODUCT_DETAILS_REQUEST,
     PRODUCT_DETAILS_SUCCESS,
-    PRODUCT_DETAILS_FAIL, CLEAR_ERROR } from "../constants/productsConstants";
+    PRODUCT_DETAILS_FAIL,  } from "../constants/productsConstants";
     import axios from "axios";
 
 export const getProducts = () => async (dispatch) => {
@@ -117,6 +125,37 @@ export const newProduct = (productData) => async (dispatch, getState) => {
   }
 };
 
+export const deleteProduct = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: DELETE_PRODUCT_REQUEST,
+    });
+    const token = localStorage.getItem('token');
+   
+
+    const config = {
+      headers: {
+        Authorization: `${token}`,
+      },
+    };
+
+    const { data } = await axios.delete(
+      `http://localhost:4000/api/v1/admin/product/${id}`,
+      config
+    );
+
+    dispatch({
+      type: DELETE_PRODUCT_SUCCESS,
+      payload: data.message,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_PRODUCT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 
 
 export const clearError = async (dispatch) => {
@@ -124,3 +163,36 @@ export const clearError = async (dispatch) => {
     type: CLEAR_ERROR,
   });
 };
+export const updateProduct = (id, productData) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: UPDATE_PRODUCT_REQUEST,
+    });
+    
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `http://localhost:4000/api/v1/admin/product/${id}`,
+      productData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_PRODUCT_SUCCESS,
+      payload: data.success,
+    });
+
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PRODUCT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+

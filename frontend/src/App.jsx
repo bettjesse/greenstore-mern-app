@@ -21,7 +21,8 @@ import Dashboard from './components/admin/Dashboard';
 import ProtectedRoute from './components/route/ProtectedRoute';
 import ProductsList from './components/admin/ProductsList';
 import NewProduct from './components/admin/NewProduct';
-
+import UpdateProduct from './components/admin/updateProducts';
+import AllOrdersList from './components/admin/AllOrdersList';
 
 const stripePromise = loadStripe("pk_test_51MlndeEGaG54q0rrSzY649HcJaHATq8YxddP8JQr6olYi0mVczg6610N8o6BA2qig541aM7B8fZqsCWNxQbGY5Kh00M3o7P0N4");
 
@@ -73,10 +74,12 @@ const App = () => {
         <Route path ="/dashboard" element= {<Dashboard/>}/>
         <Route path ="/products" element= {<ProductsList/>}/>
         <Route path ="/add-product" element= {<NewProduct/>}/>
+        <Route path ="/product/admin/:id/edit" element= {<UpdateProduct/>}/>
+        <Route path ="/admin/orders" element= {<AllOrdersList/>}/>
    
   {/* <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} isAdmin={true} />} />
   */}
- 
+
         
       </Routes>
       <Footer />

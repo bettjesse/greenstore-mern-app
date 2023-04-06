@@ -7,6 +7,9 @@ import {
   MY_ORDER_REQUEST,
   MY_ORDER_SUCCESS,
   MY_ORDER_FAIL,
+  ALL_ORDER_REQUEST,
+  ALL_ORDER_SUCCESS,
+  ALL_ORDER_FAIL,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
   ORDER_DETAILS_FAIL,
@@ -88,6 +91,33 @@ export const getOrderDetails = (id) => async (dispatch) => {
     console.error('Failed to get order details:', error);
     dispatch({
       type: ORDER_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const allOrders = () => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ALL_ORDER_REQUEST });
+    const token = localStorage.getItem('token'); // retrieve the token from local storage
+
+    const config = {
+      headers: {
+        Authorization: `${token}`,
+      },
+    };
+
+    const { data } = await axios.get('http://localhost:4000/api/v1/admin/orders', config);
+    console.log('All orders retrieved:', data);
+
+    dispatch({ type: ALL_ORDER_SUCCESS, payload: data });
+  } catch (error) {
+    console.error('Failed to get all orders:', error);
+    dispatch({
+      type: ALL_ORDER_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

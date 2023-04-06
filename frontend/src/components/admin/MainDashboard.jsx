@@ -7,6 +7,8 @@ import { getAdminProducts } from '../../actions/productActions';
 const MainDashboard = () => {
     const dispatch = useDispatch()
     const {products} = useSelector((state)=> state.products)
+    const {totalAmount,orders} = useSelector((state)=> state.allOrdersRed)
+    
 
     useEffect(()=>{
         dispatch(getAdminProducts)
@@ -17,11 +19,15 @@ const MainDashboard = () => {
       <div className="grid grid-cols-3 gap-4 p-4">
         <div className="bg-white rounded-md shadow-md p-4">
           <h2 className="text-lg font-medium mb-2">Orders</h2>
-          <p className="text-3xl font-bold">15</p>
+          <p className="text-3xl font-bold">{orders && orders.length}</p>
         </div>
         <div className="bg-white rounded-md shadow-md p-4">
-          <h2 className="text-lg font-medium mb-2">Total Amount</h2>
-          <p className="text-3xl font-bold">$500</p>
+          <h2 className="text-lg font-medium mb-2">Total Amount(ksh)</h2>
+          <p className="text-3xl font-bold">
+           {totalAmount}
+          </p>
+          
+            
         </div>
         <div className="bg-white rounded-md shadow-md p-4">
           <h2 className="text-lg font-medium mb-2">Out of stock</h2>

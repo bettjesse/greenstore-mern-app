@@ -38,7 +38,15 @@ const Cart = () => {
     <div className="container mx-auto my-8">
       <h1 className="text-2xl font-bold mb-4">Cart</h1>
       {cartItems.length < 1 ? (
-        <h2 className="text-lg">Cart is empty. Go shopping!</h2>
+       <h2 className="text-lg">
+       Cart is empty{" "}
+       <Link to="/">
+         <span className="text-xl font-bold hover:underline hover:text-blue-500">
+           Go shopping!
+         </span>{" "}
+       </Link>
+     </h2>
+     
       ) : (
         <>
           <ul className="divide-y divide-gray-200">

@@ -29,7 +29,7 @@ exports.newProduct = async (req, res, next) => {
     // Upload each image to Cloudinary and get its URL and public ID
     for (let i = 0; i < images.length; i++) {
       const result = await cloudinary.v2.uploader.upload(images[i], { folder: 'my-folder' });
-      console.log(result)
+      // console.log(result)
       imagesLinks.push({
         public_id: result.public_id,
         url: result.secure_url
@@ -135,6 +135,43 @@ exports.updateProductById = async (req, res, next) => {
         message: "Product not found"
       });
     }
+    // let images = [];
+    // console.log('req.body.images:', req.body.images);
+    // console.log('typeof req.body.images:', typeof req.body.images);
+    
+    // if (typeof req.body.images === "string") {
+    //   images.push(req.body.images);
+    // } else if (Array.isArray(req.body.images)) {
+    //   images = req.body.images;
+      
+    // } else {
+    //   throw new Error('Invalid images format');
+    // }
+
+    // if (images!== undefined){
+    //   for (let i = 0; i < images.length; i++) {
+    //     const result =await cloudinary.v2.uploader.destroy(product.images[i].public_id)
+    //   }
+    //   let imagesLinks = [];
+
+    //   // Upload each image to Cloudinary and get its URL and public ID
+    //   for (let i = 0; i < images.length; i++) {
+    //     const result = await cloudinary.v2.uploader.upload(images[i], { folder: 'my-folder' });
+    //     // console.log(result)
+    //     imagesLinks.push({
+    //       public_id: result.public_id,
+    //       url: result.secure_url
+    //     });
+       
+    //   }
+  
+    //   // Add user ID to request body
+    //   // req.body.user = req.user.id;
+  
+    //   // Replace images array in request body with the image URLs and public IDs
+    //   req.body.images = imagesLinks;
+    // }
+   
     product = await Product.findByIdAndUpdate(req.params.id,req.body,{
       new: true,
       runValidators: true,
@@ -163,6 +200,9 @@ exports.deleteProduct = async (req, res, next) => {
         success: false,
         message: "Product not found"
       });
+    }
+    for (let i = 0; i < product.images.length; i++) {
+      const result =await cloudinary.v2.uploader.destroy(product.images[i].public_id)
     }
     await product.remove();
     res.status(200).json({
