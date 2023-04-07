@@ -32,6 +32,7 @@ exports.createOrder = async (req, res) => {
 //get single order
 exports.getOrderById = async (req, res) => {
     const { id } = req.params;
+    
   
     try {
       const order = await Order.findById(id).populate('user', 'name email');
@@ -96,8 +97,62 @@ exports.getOrderById = async (req, res) => {
 }
 
 // Update an order by ID
+// exports.updateOrderById = async (req, res) => {
+//   const { id } = req.params;
+
+//   try {
+//     const order = await Order.findById(id);
+
+//     if (!order) {
+//       return res.status(404).json({
+//         success: false,
+//         error: 'Order not found'
+//       });
+//     }
+
+//     if (order.deliveredAt) {
+//       return res.status(400).json({
+//         success: false,
+//         error: 'Order has already been delivered'
+//       });
+//     }
+
+// // 
+
+
+
+
+//     order.deliveredAt = Date.now();
+//     order.orderStatus = 'delivered';
+
+//     await order.save();
+
+//     for (const item of order.items) {
+//       const product = await Product.findById(item.product);
+
+//       if (product) {
+//         product.stock -= item.quantity;
+
+//         await product.updateOne({ stock: product.stock });
+//       }
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       data: order
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       success: false,
+//       error: 'Server error'
+//     });
+//   }
+// };
+
 exports.updateOrderById = async (req, res) => {
   const { id } = req.params;
+  const { status } = req.body;
 
   try {
     const order = await Order.findById(id);
@@ -116,20 +171,19 @@ exports.updateOrderById = async (req, res) => {
       });
     }
 
-    order.deliveredAt = Date.now();
-    order.orderStatus = 'delivered';
+    if (status === 'shipped') {
+      order.orderStatus = 'shipped';
+    } else if (status === 'delivered') {
+      order.orderStatus = 'delivered';
+      order.shippedAt = Date.now();
+    } else {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid order status'
+      });
+    }
 
     await order.save();
-
-    for (const item of order.items) {
-      const product = await Product.findById(item.product);
-
-      if (product) {
-        product.stock -= item.quantity;
-
-        await product.updateOne({ stock: product.stock });
-      }
-    }
 
     res.status(200).json({
       success: true,
@@ -143,6 +197,9 @@ exports.updateOrderById = async (req, res) => {
     });
   }
 };
+
+
+
 
 // Delete an order by ID
 exports.deleteOrderById = async (req, res) => {

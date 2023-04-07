@@ -10,6 +10,10 @@ import {
   ALL_ORDER_REQUEST,
   ALL_ORDER_SUCCESS,
   ALL_ORDER_FAIL,
+  UPDATE_ORDER_REQUEST,
+  UPDATE_ORDER_SUCCESS,
+ 
+  UPDATE_ORDER_FAIL ,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
   ORDER_DETAILS_FAIL,
@@ -122,6 +126,34 @@ export const allOrders = () => async (dispatch, getState) => {
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
+    });
+  }
+};
+
+export const updateOrder= (id, status)=> async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_ORDER_REQUEST });
+    const token = localStorage.getItem('token');
+    
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${token}`,
+      },
+    };
+
+    const { data } = await axios.put(`http://localhost:4000/api/v1/admin/order/${id}`, status, config);
+    console.log('Received response:', data);
+
+    dispatch({
+      type: UPDATE_ORDER_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_ORDER_FAIL,
+      payload:
+        error.response && error.response.data.error ? error.response.data.error : error.message,
     });
   }
 };

@@ -7,7 +7,7 @@ import Sidebar from './Sidebar';
 const AllOrdersList = () => {
   const dispatch = useDispatch();
   const { loading, orders } = useSelector((state) => state.allOrdersRed);
- 
+
 
   useEffect(() => {
     dispatch(allOrders());
@@ -41,7 +41,7 @@ const AllOrdersList = () => {
                   <td className="py-2 px-3 border-b border-gray-300">{order.paymentInfo.status}</td>
                   <td className="py-2 px-3 border-b border-gray-300">{order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}</td>
                   <td className="py-2 px-3 border-b border-gray-300">
-                    <Link to={`/order/${order._id}`} className="text-blue-500 hover:text-blue-700">
+                    <Link to={`/admin/order/${order._id}`} className="text-blue-500 hover:text-blue-700">
                       Details
                     </Link>
                   </td>

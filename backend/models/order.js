@@ -84,6 +84,10 @@ default:0
         type: Date,
        
       },
+      shippedAt:{
+        type: Date
+      },
+     
     createdAt: {
         type: Date,
         default: Date.now

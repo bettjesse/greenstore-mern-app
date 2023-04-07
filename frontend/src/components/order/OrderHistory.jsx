@@ -41,13 +41,36 @@ const OrderHistory = () => {
           <span style={{ color: value === 'succeeded' ? 'green' : 'red' }}>{value}</span>
         ),
       },
+      // {
+      //   Header: 'Delivery Status',
+      //   accessor: 'orderStatus',
+      //   Cell: ({ value }) => (
+      //     <span style={{ color: value === 'delivered' ? 'green' : 'red' }}>{value}</span>
+      //   ),
+      // },
       {
         Header: 'Delivery Status',
         accessor: 'orderStatus',
-        Cell: ({ value }) => (
-          <span style={{ color: value === 'delivered' ? 'green' : 'red' }}>{value}</span>
-        ),
+        Cell: ({ value }) => {
+          let color = '';
+          switch(value) {
+            case 'delivered':
+              color = 'green';
+              break;
+            case 'shipped':
+              color = 'blue';
+              break;
+            case 'processing':
+              color = 'orange';
+              break;
+            default:
+              color = 'red';
+              break;
+          }
+          return <span style={{ color }}>{value}</span>;
+        },
       },
+      
       {
         Header: 'Actions',
         accessor: '_id',

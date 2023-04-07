@@ -8,6 +8,10 @@ import {
     ALL_ORDER_SUCCESS,
     ALL_ORDER_FAIL,
     MY_ORDER_FAIL,
+    UPDATE_ORDER_REQUEST,
+    UPDATE_ORDER_SUCCESS,
+    UPDATE_ORDER_RESET,
+    UPDATE_ORDER_FAIL ,
     ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
   ORDER_DETAILS_FAIL,
@@ -125,3 +129,34 @@ export const allOrdersReducer = (state = { orders: [], loading: false, error: nu
       return state;
   }
 };
+
+export const updateOrderReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_ORDER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case UPDATE_ORDER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isUpdated: action.payload
+      };
+    case UPDATE_ORDER_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload
+      };
+      case UPDATE_ORDER_RESET:
+        return {
+          ...state,
+         
+          isUpdated: false
+        }
+    default:
+      return state;
+  }
+}
