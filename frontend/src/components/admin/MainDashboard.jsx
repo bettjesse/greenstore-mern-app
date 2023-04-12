@@ -24,15 +24,15 @@ const MainDashboard = () => {
         <div className="bg-white rounded-md shadow-md p-4">
           <h2 className="text-lg font-medium mb-2">Total Amount(ksh)</h2>
           <p className="text-3xl font-bold">
-           {totalAmount}
+           {totalAmount && totalAmount.toFixed(2)}
           </p>
           
             
         </div>
-        <div className="bg-white rounded-md shadow-md p-4">
+        {/* <div className="bg-white rounded-md shadow-md p-4">
           <h2 className="text-lg font-medium mb-2">Out of stock</h2>
           <p className="text-3xl font-bold">500</p>
-        </div>
+        </div> */}
         <div className="bg-white rounded-md shadow-md p-4">
           <h2 className="text-lg font-medium mb-2">Products</h2>
           <p className="text-3xl font-bold">{products && products.length}</p>

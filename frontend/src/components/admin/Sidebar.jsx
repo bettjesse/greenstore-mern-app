@@ -42,13 +42,13 @@ const Sidebar = () => {
         <li className="my-4">
           <Link to="/admin/orders" className="flex items-center text-gray-100 hover:text-gray-300">
             <FaClipboardList className="mr-2" />
-            <h2 className="text-lg font-medium">Orders</h2>
+            <h2 className="text-lg font-medium">Orders Report</h2>
           </Link>
         </li>
         <li className="my-4">
-          <Link to="/settings" className="flex items-center text-gray-100 hover:text-gray-300">
+          <Link to="/sales/report" className="flex items-center text-gray-100 hover:text-gray-300">
             <FaCog className="mr-2" /> 
-            <h2 className="text-lg font-medium">Settings</h2>
+            <h2 className="text-lg font-medium">Report</h2>
           </Link>
         </li>
       </ul>

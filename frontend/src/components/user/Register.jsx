@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../actions/userAction';
 import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -10,12 +12,17 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+
+
 
   const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
 const submitHandler = (e) => {
   e.preventDefault();
+// Validation for name field
 
   if (password !== confirmPassword) {
     alert('Passwords do not match');
@@ -41,7 +48,9 @@ const submitHandler = (e) => {
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            
           />
+          
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2" htmlFor="email">
@@ -57,31 +66,63 @@ const submitHandler = (e) => {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 font-bold mb-2" htmlFor="password">
-            Password
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="password"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className="mb-6">
+  <label className="block text-gray-700 font-bold mb-2" htmlFor="password">
+    Password
+  </label>
+  <div className="relative">
+    <input
+      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      id="password"
+      type={showPassword ? 'text' : 'password'}
+      placeholder="Password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+    />
+    <div
+      className="absolute right-0 top-0 mt-2 mr-3 cursor-pointer"
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? <FaEyeSlash /> : <FaEye />}
+    </div>
+  </div>
+</div>
+<div className="mb-6">
+  <label className="block text-gray-700 font-bold mb-2" htmlFor="password">
+    Confirm Password
+  </label>
+  <div className="relative">
+    <input
+      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      id="password"
+      type={showPassword ? 'text' : 'password'}
+      placeholder="confirm Password"
+      value={confirmPassword}
+      onChange={(e) => setConfirmPassword(e.target.value)}
+    />
+    <div
+      className="absolute right-0 top-0 mt-2 mr-3 cursor-pointer"
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? <FaEyeSlash /> : <FaEye />}
+    </div>
+  </div>
+</div>
+
+
+
+        {/* <div className="mb-6">
   <label className="block text-gray-700 font-bold mb-2" htmlFor="confirmPassword">
     Confirm Password
   </label>
   <input
     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
     id="confirmPassword"
-    type="password"
+    type={showPassword ? 'text' : 'password'}
     placeholder="Confirm Password"
     value={confirmPassword}
     onChange={(e) => setConfirmPassword(e.target.value)}
   />
-</div>
+</div> */}
         <div className="flex items-center justify-between">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -90,7 +131,7 @@ const submitHandler = (e) => {
             Register
           </button>
           {loading && <p>Loading...</p>}
-          {error && <p>Error: {error}</p>}
+          {/* {error && <p>Error: {error}</p>} */}
           {isAuthenticated && <p>Login</p>}
         </div>
       </form>

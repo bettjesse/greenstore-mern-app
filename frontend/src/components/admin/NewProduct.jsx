@@ -37,7 +37,7 @@ const NewProduct = () => {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('price', price);
-    formData.append('stock', price);
+    formData.append('stock', stock);
     formData.append('description', description);
     images.forEach((image) => {
       formData.append('images', image);
@@ -84,7 +84,7 @@ const NewProduct = () => {
           </div>
           <div className="mb-4">
   <label className="block text-gray-700 font-bold mb-2" htmlFor="price">
-    Price
+    Price(kg)
   </label>
   <input
     className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -119,7 +119,7 @@ onChange={(e) => setDescription(e.target.value)}
 </div>
 <div className="mb-4">
   <label className="block text-gray-700 font-bold mb-2" htmlFor="stock">
-    Stock
+    Number of 
   </label>
   <input
     className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

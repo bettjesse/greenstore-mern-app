@@ -24,7 +24,7 @@ import NewProduct from './components/admin/NewProduct';
 import UpdateProduct from './components/admin/updateProducts';
 import AllOrdersList from './components/admin/AllOrdersList';
 import UpdateOrder from './components/admin/UpdateOrder';
-
+import Report from './components/admin/Report';
 const stripePromise = loadStripe("pk_test_51MlndeEGaG54q0rrSzY649HcJaHATq8YxddP8JQr6olYi0mVczg6610N8o6BA2qig541aM7B8fZqsCWNxQbGY5Kh00M3o7P0N4");
 
 const App = () => {
@@ -78,6 +78,7 @@ const App = () => {
         <Route path ="/product/admin/:id/edit" element= {<UpdateProduct/>}/>
         <Route path ="/admin/orders" element= {<AllOrdersList/>}/>
         <Route path ="/admin/order/:id" element= {<UpdateOrder/>}/>
+        <Route path ="/sales/report" element= {<Report/>}/>
 
        
         {/* /admin/order/642d7ebbe4e1d8148740e3fb */}

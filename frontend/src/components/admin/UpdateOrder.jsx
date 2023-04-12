@@ -55,8 +55,10 @@ const UpdateOrder = () => {
               onChange={(e) => setStatus(e.target.value)}
             >
               <option value="">-- Select Status --</option>
+             <option value="confirmed">confirmed</option>
               <option value="Pending">Pending</option>
-              <option value="Confirmed">Confirmed</option>
+         
+              
               <option value="shipped">shipped</option>
               <option value="delivered">delivered</option>
 
